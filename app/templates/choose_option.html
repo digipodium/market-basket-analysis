@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+    body{
+        background-color: rgb(0, 0, 0);
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="country">Select a country to get Market basket rules</label>
+                            <select class="form-control form-control-lg" name="country" id="country">
+                                
+                                {% for item in countries %}
+                                <option>{{ item }}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="support">Min Support</label>
+                            <input type="range"
+                            class="form-control form-control-lg" name="support" id="support" max="100" min="1" aria-describedby="helpId" placeholder="select a value">
+                            <small id="helpId" class="form-text text-muted">select a value to get optimized results set</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="support">lift</label>
+                            <input type="range"
+                            class="form-control form-control-lg" name="support" id="support" max="100" min="1" aria-describedby="helpId" placeholder="select a value">
+                            <small id="helpId" class="form-text text-muted">select a value to get optimized results set</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="support">Confidence</label>
+                            <input type="range"
+                            class="form-control form-control-lg" name="support" id="support" max="100" min="1" aria-describedby="helpId" placeholder="select a value">
+                            <small id="helpId" class="form-text text-muted">select a value to get optimized results set</small>
+                        </div>
+                        <button type="button" name="" id="" class="btn btn-primary btn-lg btn-block">generate results</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <img class="card-img-top" src="holder.js/100x180/" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">How to fill the form</h4>
+                    <p class="card-text lead">
+                        <b>Support</b> is the relative frequency that the rules show up. In many instances, you may want to look for high support in order to make sure it is a useful relationship. However, there may be instances where a low support is useful if you are trying to find “hidden” relationships.</p>
+                        <p class="card-text lead"><b>Lift</b> is the ratio of the observed support to that expected if the two rules were independent (see wikipedia). The basic rule of thumb is that a lift value close to 1 means the rules were completely independent. Lift values > 1 are generally more “interesting” and could be indicative of a useful rule pattern.</p>
+                        <p class="card-text lead"><b>Confidence</b> is a measure of the reliability of the rule. A confidence of .5 in the above example would mean that in 50% of the cases where Diaper and Gum were purchased, the purchase also included Beer and Chips. For product recommendation, a 50% confidence may be perfectly acceptable but in a medical situation, this level may not be high enough.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
