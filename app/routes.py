@@ -81,6 +81,9 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('profile.html', user=user, title=f'{user.username} profile')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.before_request
 def before_request():
