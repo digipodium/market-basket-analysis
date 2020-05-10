@@ -2,6 +2,7 @@ import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
 
+
 def encode_units(x):
     if x <= 0:
         return 0
@@ -9,7 +10,7 @@ def encode_units(x):
         return 1
 
 def load_file(filename='online_retail.xlsx'):
-    df = pd.read_excel(filename)
+    df = pd.read_csv(filename)
     return df
 
 def preprocessing(df):
@@ -26,7 +27,8 @@ def generate_basket(df, country="France",min_support=0.07,max_length=3):
           .sum().unstack().reset_index().fillna(0)
           .set_index('InvoiceNo'))
     basket_sets = basket.applymap(encode_units)
-    basket_sets.drop('POSTAGE', inplace=True, axis=1)
+    try:basket_sets.drop('POSTAGE', inplace=True, axis=1)
+    except:pass
     frequent_itemsets = apriori(basket_sets, min_support=min_support , use_colnames=True,max_len=max_length)
     rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
     return rules
@@ -43,7 +45,7 @@ if __name__ == "__main__":
     print(df['Country'].unique().tolist())
     print("generating basket optimised recommedations")
     rules = generate_basket(df)
-    print("loading rules")
+    print("loading rules",rules)
     results = get_rules(rules)
     print("RESULTS")
     print(results)

@@ -3,6 +3,9 @@ from flask_login import logout_user,current_user, login_user, login_required
 from app import app,db
 from app.models import User, MessageData
 from datetime import datetime
+from app.core.algo import *
+
+
 
 @app.route('/')
 @app.route('/index')
@@ -96,26 +99,34 @@ def edit_profile():
         return redirect(url_for('edit_profile'))
     return render_template('edit_profile.html', title='Edit Profile',user=user)
 
-
-@app.route('/input',methods=['GET','POST'])
-def input_page():
-    if request.method =='POST':
-        msg = request.form.get('msg')
-        if msg: # not none
-            if len(msg) >= 10: # just some validation
-                msgObj = MessageData(message=msg)   # add data to model object
-                db.session.add(msgObj)              # save data in database
-                db.session.commit()                 # update database
-                # prediction logic
-                flash('we have saved ur data, prediction result will be available shortly','success')
-            else:
-                flash('message smaller than 10 characters cannot be predicted','danger')
-        else:
-            flash('message not provided, please fill in some data to predict')
-    return render_template('input.html',title="Input data")
-
-
-@app.route('/select_options', methods=['GET','POST'])
+@app.route('/mbo', methods=['GET','POST'])
 def select_options():
-    countries=['United Kingdom', 'France', 'Australia', 'Netherlands', 'Germany', 'Norway', 'EIRE', 'Switzerland', 'Spain', 'Poland', 'Portugal', 'Italy', 'Belgium', 'Lithuania', 'Japan', 'Iceland', 'Channel Islands', 'Denmark', 'Cyprus', 'Sweden', 'Finland', 'Austria', 'Bahrain', 'Israel', 'Greece', 'Hong Kong', 'Singapore', 'Lebanon', 'United Arab Emirates', 'Saudi Arabia', 'Czech Republic', 'Canada', 'Unspecified', 'Brazil', 'USA', 'European Community', 'Malta', 'RSA']
+    countries=df['Country'].unique().tolist()
     return render_template('choose_option.html',countries=countries) 
+
+@app.route('/results',methods=["POST","GET"])
+def results():
+    if request.method == "POST":
+        country = request.form.get('country')
+        confidence = int(request.form.get('confidence'))
+        lift = int(request.form.get('lift'))
+        support = int(request.form.get('support'))
+        length = int(request.form.get('length'))
+        support /= 100
+        lift /= 100
+        confidence /= 100
+        print("country name",country)
+        print("min support",support)
+        print("min lift",lift)
+        print("min confidence",confidence)
+        print("max length",length)
+        rules = generate_basket(df, country=country, min_support=support, max_length=length)
+        results = get_rules(rules)
+    return render_template('results.html',data=results.to_html(),c=confidence,l=lift,s=support,ml =length)
+
+
+filepath = 'app\\core\\cleaned_online_retail.csv'
+
+print("loading the market basket dataset")
+df = load_file(filepath)
+print("processed dataset, reload home page")
