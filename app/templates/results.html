@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
 {% block css %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <style>
-    
+    .svg-container{
+        margin: auto !important;
+    }
 </style>
 {% endblock %}
 
@@ -51,8 +55,14 @@
         </div>
         <div class="col-12 mt-3">
             {{data|safe}}
+            <hr>
+            <div class="alert alert-success" role="alert">
+                <strong>Show</strong> <a href="/visualize" class="alert-link">Visualized results</a>
+            </div>
         </div>
+        
     </div>
+    
 </div>
 {% endblock %}
 

@@ -3,3 +3,4 @@ flask-migrate
 python-dotenv
 flask-login
 mlxtend
+plotly

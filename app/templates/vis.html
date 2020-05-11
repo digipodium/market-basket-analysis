@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+    .svg-container{
+        margin: auto !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="jumbotron mt-4">
+        <h1 class="display-3">Visulization of Data</h1>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="/mbo" >try other values</a>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="card shadow=lg">
+                <div class="chart card-body" id="g1">
+                    <script>
+                        var graphs = {{session.g1 | safe}};
+                        Plotly.plot('g1',graphs,{});
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card shadow=lg">
+                <div class="chart card-body" id="g2">
+                    <script>
+                        var graphs = {{session.g2 | safe}};
+                        Plotly.plot('g2',graphs,{});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $('.dataframe').addClass('table table-special table-hover')
+</script>
+{% endblock %}

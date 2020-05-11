@@ -4,7 +4,7 @@ from app import app,db
 from app.models import User, MessageData
 from datetime import datetime
 from app.core.algo import *
-
+import plotly.express as px
 
 
 @app.route('/')
@@ -125,11 +125,26 @@ def results():
         print("max length",length)
         rules = generate_basket(df, country=country, min_support=support, max_length=length)
         results = get_rules(rules)
-    return render_template('results.html',data=results.to_html(),c=confidence,l=lift,s=support,ml =length)
+        results = results.head(25).reset_index()
+        fig1 = px.scatter_3d(data_frame=results,x=results.index,y='confidence',z='lift',title="visualization b/w products",width=500, height=500)
+        fig2 = px.histogram(data_frame=results,x=results.index,y='confidence',title="visualization b/w products",width=500, height=500,marginal='box')
+        g1 = fig1.to_json()
+        g2 = fig2.to_json()
+        session['g1'] =g1
+        session['g2'] =g2
+        return render_template('results.html',data=results.head(100).to_html(),c=confidence,l=lift,s=support,ml =length)
+    else:
+        return redirect('/mbo')
 
+
+@app.route('/visualize')
+def vis():
+    if 'g1' in session and 'g2' in session:
+        return render_template('vis.html')
+    else:
+        return redirect('/mbo')
 
 filepath = 'app\\core\\cleaned_online_retail.csv'
-
 print("loading the market basket dataset")
 df = load_file(filepath)
 print("processed dataset, reload home page")
