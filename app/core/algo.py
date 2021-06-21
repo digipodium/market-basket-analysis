@@ -10,7 +10,7 @@ def encode_units(x):
         return 1
 
 def load_file(filename='online_retail.xlsx'):
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename,low_memory=False)
     return df
 
 def preprocessing(df):

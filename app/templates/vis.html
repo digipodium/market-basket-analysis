@@ -23,20 +23,30 @@
         <div class="col-6">
             <div class="card shadow=lg">
                 <div class="chart card-body" id="g1">
+                    
+                    {% if session.error %}
+                        <p class="lead">Visualization could not be loaded to memory limit</p>
+                    {% else %}
                     <script>
                         var graphs = {{session.g1 | safe}};
                         Plotly.plot('g1',graphs,{});
                     </script>
+                    {% endif %}
+                        
                 </div>
             </div>
         </div>
         <div class="col-6">
             <div class="card shadow=lg">
                 <div class="chart card-body" id="g2">
+                    {% if session.error %}
+                    <p class="lead">Visualization could not be loaded to memory limit</p>
+                     {% else %}
                     <script>
                         var graphs = {{session.g2 | safe}};
                         Plotly.plot('g2',graphs,{});
                     </script>
+                    {% endif %}
                 </div>
             </div>
         </div>

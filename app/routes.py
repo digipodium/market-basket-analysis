@@ -109,6 +109,7 @@ def select_options():
 
 @app.route('/results',methods=["POST","GET"])
 def results():
+    session['error'] =''
     if request.method == "POST":
         country = request.form.get('country')
         confidence = int(request.form.get('confidence'))
@@ -126,12 +127,15 @@ def results():
         rules = generate_basket(df, country=country, min_support=support, max_length=length)
         results = get_rules(rules)
         results = results.head(25).reset_index()
-        fig1 = px.scatter_3d(data_frame=results,x=results.index,y='confidence',z='lift',title="visualization b/w products",width=500, height=500)
-        fig2 = px.histogram(data_frame=results,x=results.index,y='confidence',title="visualization b/w products",width=500, height=500,marginal='box')
-        g1 = fig1.to_json()
-        g2 = fig2.to_json()
-        session['g1'] =g1
-        session['g2'] =g2
+        try:
+            fig1 = px.scatter_3d(data_frame=results,x=results.index,y='confidence',z='lift',title="visualization b/w products",width=500, height=500)
+            fig2 = px.histogram(data_frame=results,x=results.index,y='confidence',title="visualization b/w products",width=500, height=500,marginal='box')
+            g1 = fig1.to_json()
+            g2 = fig2.to_json()
+            session['g1'] =g1
+            session['g2'] =g2
+        except:
+            session['error'] = "vislualiztion could not be done"
         return render_template('results.html',data=results.head(100).to_html(),c=confidence,l=lift,s=support,ml =length)
     else:
         return redirect('/mbo')
