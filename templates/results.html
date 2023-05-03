@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+    .svg-container {
+        margin: auto !important;
+    }
+</style>
+{% endblock %}  
+
+
+{% block content %}
+<div class="container">
+    <div class="row justify-items-center">
+        <div class="col-md-12 mt-3 mx-auto">
+            <h1 class="display-3">Results</h1>
+            <p class="lead">
+                Product pairs found by AI Market basket optimization is listed below
+            </p>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{s}}</h4>
+                    <p class="card-text">SUPPORT</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{l}}</h4>
+                    <p class="card-text">LIFT</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{c}}</h4>
+                    <p class="card-text">CONFIDENCE</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ml}}</h4>
+                    <p class="card-text">MAX PRODUCT</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-3">
+            {{data|safe}}
+            <hr>
+            <div class="alert alert-success" role="alert">
+                <strong>Show</strong> <a href="/visualize" class="alert-link">Visualized results</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $('.dataframe').addClass('table table-special table-hover')
+</script>
+{% endblock %}
